@@ -18,20 +18,9 @@ spec:
     spec:
       containers:
       - name: manager
-        image: public.ecr.aws/j1r0q0g6/notebooks/notebook-controller
+        image: kubeflownotebookswg/notebook-controller:v1.6.0-rc.0
         command:
           - /manager
-        env:
-          - name: USE_ISTIO
-            valueFrom:
-              configMapKeyRef:
-                name: config
-                key: USE_ISTIO
-          - name: ISTIO_GATEWAY
-            valueFrom:
-              configMapKeyRef:
-                name: config
-                key: ISTIO_GATEWAY
         imagePullPolicy: Always
         livenessProbe:
           httpGet:

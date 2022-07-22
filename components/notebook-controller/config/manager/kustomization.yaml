@@ -5,5 +5,4 @@ resources:
 configMapGenerator:
 - name: config
   literals:
-  - USE_ISTIO=true
-  - ISTIO_GATEWAY=kubeflow/kubeflow-gateway
+  - USE_ISTIO=false
