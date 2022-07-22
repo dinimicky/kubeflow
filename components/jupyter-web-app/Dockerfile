@@ -1,9 +1,5 @@
-FROM ubuntu:18.04
+FROM python:3.6
 
-RUN apt-get update -y && \
-    apt-get install -y apt-utils  build-essential curl \
-	python-dev python3-pip \
-    libssl-dev libffi-dev python3-bcrypt
 
 # We copy just the requirements.txt first to leverage Docker cache
 COPY ./requirements.txt /app/requirements.txt
