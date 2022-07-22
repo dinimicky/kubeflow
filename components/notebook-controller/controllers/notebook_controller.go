@@ -450,6 +450,34 @@ func generateService(instance *v1beta1.Notebook) *corev1.Service {
 			},
 		},
 	}
+
+	if os.Getenv("USE_AMBASSADOR") == "true" {
+		annotations := make(map[string]string)
+		for k, v := range instance.ObjectMeta.Annotations {
+			annotations[k] = v
+		}
+
+		rewrite := fmt.Sprintf("/notebook/%s/%s/", instance.Namespace, instance.Name)
+		// If AnnotationRewriteURI is present, use this value for "rewrite"
+		if _, ok := annotations[AnnotationRewriteURI]; ok && len(annotations[AnnotationRewriteURI]) > 0 {
+			rewrite = annotations[AnnotationRewriteURI]
+		}
+		svc.Annotations = map[string]string{
+			"getambassador.io/config": strings.Join(
+				[]string{
+					"---",
+					"apiVersion: ambassador/v0",
+					"kind:  Mapping",
+					"name: notebook_" + instance.Namespace + "_" + instance.Name + "_mapping",
+					"prefix: /notebook/" + instance.Namespace + "/" + instance.Name,
+					"rewrite: " + rewrite,
+					"timeout_ms: 300000",
+					"service: " + instance.Name + "." + instance.Namespace,
+					"use_websocket: true",
+				}, "\n"),
+		}
+	}
+
 	return svc
 }
 
