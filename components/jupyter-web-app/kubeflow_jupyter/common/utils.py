@@ -81,7 +81,7 @@ def get_notebook_uptime(created_t):
 # create the corresponding object.
 def create_notebook_template():
   notebook = {
-      "apiVersion": "kubeflow.org/v1alpha1",
+      "apiVersion": "kubeflow.org/v1",
       "kind": "Notebook",
       "metadata": {
           "name": "",

@@ -119,7 +119,7 @@ def get_notebooks(ns):
   custom_api = client.CustomObjectsApi()
 
   notebooks = \
-      custom_api.list_namespaced_custom_object("kubeflow.org", "v1alpha1",
+      custom_api.list_namespaced_custom_object("kubeflow.org", "v1",
                                                ns, "notebooks")['items']
 
   # Generate the list with the needed fields from the Notebooks
@@ -162,7 +162,7 @@ def delete_notebook(nb, ns):
   options = client.V1DeleteOptions()
 
   return \
-      custom_api.delete_namespaced_custom_object("kubeflow.org", "v1alpha1",
+      custom_api.delete_namespaced_custom_object("kubeflow.org", "v1",
                                                  ns, "notebooks", nb, options)
 
 
@@ -170,7 +170,7 @@ def create_notebook(nb):
   # nb: Dict
   ns = nb["metadata"]["namespace"]
   return \
-      custom_api.create_namespaced_custom_object("kubeflow.org", "v1alpha1",
+      custom_api.create_namespaced_custom_object("kubeflow.org", "v1",
                                                  ns, "notebooks", nb)
 
 
