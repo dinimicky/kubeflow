@@ -1,4 +1,4 @@
-FROM python:3.6
+FROM docker-reg.devops.xiaohongshu.com/firefly/python:3.6
 
 
 # We copy just the requirements.txt first to leverage Docker cache
