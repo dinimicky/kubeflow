@@ -163,7 +163,7 @@ def delete_notebook(nb, ns):
 
   return \
       custom_api.delete_namespaced_custom_object("kubeflow.org", "v1",
-                                                 ns, "notebooks", nb, options)
+                                                 ns, "notebooks", nb, body=options)
 
 
 def create_notebook(nb):
