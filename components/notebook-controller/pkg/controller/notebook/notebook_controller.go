@@ -52,6 +52,7 @@ const DefaultServingPort = 80
 // The default fsGroup of PodSecurityContext.
 // https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#podsecuritycontext-v1-core
 const DefaultFSGroup = int64(100)
+const AnnotationRewriteURI = "notebooks.kubeflow.org/http-rewrite-uri"
 
 // Add creates a new Notebook Controller and adds it to the Manager with default RBAC. The Manager will set fields on the Controller
 // and Start it when the Manager is Started.
@@ -372,6 +373,16 @@ func generateService(instance *v1alpha1.Notebook) *corev1.Service {
 	if containerPorts != nil {
 		port = int(containerPorts[0].ContainerPort)
 	}
+	annotations := make(map[string]string)
+	for k, v := range instance.ObjectMeta.Annotations {
+		annotations[k] = v
+	}
+
+	rewrite := fmt.Sprintf("/notebook/%s/%s/", instance.Namespace, instance.Name)
+	// If AnnotationRewriteURI is present, use this value for "rewrite"
+	if _, ok := annotations[AnnotationRewriteURI]; ok && len(annotations[AnnotationRewriteURI]) > 0 {
+		rewrite = annotations[AnnotationRewriteURI]
+	}
 	svc := &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      instance.Name,
@@ -384,7 +395,7 @@ func generateService(instance *v1alpha1.Notebook) *corev1.Service {
 						"kind:  Mapping",
 						"name: notebook_" + instance.Namespace + "_" + instance.Name + "_mapping",
 						"prefix: /notebook/" + instance.Namespace + "/" + instance.Name,
-						"rewrite: /notebook/" + instance.Namespace + "/" + instance.Name,
+						"rewrite: " + rewrite,
 						"timeout_ms: 300000",
 						"service: " + instance.Name + "." + instance.Namespace,
 						"use_websocket: true",
