@@ -378,7 +378,7 @@ func generateService(instance *v1alpha1.Notebook) *corev1.Service {
 		annotations[k] = v
 	}
 
-	rewrite := fmt.Sprintf("/notebook/%s/%s/", instance.Namespace, instance.Name)
+	rewrite := fmt.Sprintf("/notebook/%s/%s", instance.Namespace, instance.Name)
 	// If AnnotationRewriteURI is present, use this value for "rewrite"
 	if _, ok := annotations[AnnotationRewriteURI]; ok && len(annotations[AnnotationRewriteURI]) > 0 {
 		rewrite = annotations[AnnotationRewriteURI]
