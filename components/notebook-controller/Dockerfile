@@ -9,7 +9,7 @@ COPY cmd/    cmd/
 COPY go.mod .
 
 ENV GO111MODULE=on
-
+ENV GOPROXY=https://goproxy.cn
 # Build
 RUN go build -gcflags 'all=-N -l' -o manager cmd/manager/main.go
 
